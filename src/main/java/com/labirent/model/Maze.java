@@ -47,4 +47,11 @@ public class Maze {
         }
     }
 
+    public int getRows(){
+        return rows;
+    }
+
+    public int getCols(){
+        return cols;
+    }
 }
