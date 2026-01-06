@@ -3,36 +3,46 @@ package com.labirent.algorithms;
 import com.labirent.datastructures.Queue;
 import com.labirent.model.Cell;
 import com.labirent.model.Maze;
+import com.labirent.model.PathFindingResult;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 
 public class BFSSolver implements MazeSolver {
 
     @Override
-    public boolean solve(Maze maze, Cell start, Cell end){
+    public PathFindingResult solve(Maze maze, Cell start, Cell end){
         maze.resetVisited();
 
         Queue<Cell> queue = new Queue<>();
+        List<Cell> visitedOrder = new ArrayList<>();
 
         start.visited = true;
         queue.enqueue(start);
+        visitedOrder.add(start);
+
+        boolean success = false;
 
         while (!queue.isEmpty()){
             Cell current = queue.dequeue();
 
             if(current.row == end.row && current.col == end.col){
-                return true;
+                success = true;
+                break;
             }
 
-            addNeighbor(maze, current, current.row - 1, current.col, 0, queue);
-            addNeighbor(maze, current, current.row + 1, current.col, 2, queue);
-            addNeighbor(maze, current, current.row, current.col - 1, 3, queue);
-            addNeighbor(maze, current, current.row, current.col + 1, 1, queue);
+            addNeighbor(maze, current, current.row - 1, current.col, 0, queue, visitedOrder);
+            addNeighbor(maze, current, current.row + 1, current.col, 2, queue, visitedOrder);
+            addNeighbor(maze, current, current.row, current.col - 1, 3, queue, visitedOrder);
+            addNeighbor(maze, current, current.row, current.col + 1, 1, queue, visitedOrder);
 
         }
 
         return false;
     }
 
-    private void addNeighbor(Maze maze, Cell parent, int r, int c, int wallDirection, Queue<Cell> queue){
+    private void addNeighbor(Maze maze, Cell parent, int r, int c, int wallDirection, Queue<Cell> queue, List<Cell> visitedOrder){
         if(!maze.isValid(r,c)) return;
 
         Cell neighbor = maze.getCell(r,c);
@@ -43,6 +53,8 @@ public class BFSSolver implements MazeSolver {
 
         neighbor.visited = true;
         neighbor.parent = parent;
+        visitedOrder.add(neighbor);
+
         queue.enqueue(neighbor);
 }
 }

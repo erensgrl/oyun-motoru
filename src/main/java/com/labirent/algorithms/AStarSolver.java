@@ -3,11 +3,16 @@ package com.labirent.algorithms;
 import com.labirent.datastructures.MinHeap;
 import com.labirent.model.Cell;
 import com.labirent.model.Maze;
+import com.labirent.model.PathFindingResult;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class AStarSolver implements MazeSolver {
     
     @Override
-    public boolean solve(Maze maze, Cell start, Cell end){
+    public PathFindingResult solve(Maze maze, Cell start, Cell end){
         maze.resetVisited();
 
         for(int r=0; r<maze.rows; r++){
@@ -16,35 +21,51 @@ public class AStarSolver implements MazeSolver {
             }
         }
 
-
         MinHeap<Cell> openSet = new MinHeap<>(maze.rows * maze.cols);
+        List<Cell> visitedOrder = new ArrayList<>();
 
         start.gCost = 0;
         start.hCost = calculateHeuristic(start,end);
         start.calculateFCost();
         openSet.insert(start);
 
+        boolean success = false;
+
         while(!openSet.isEmpty()){
 
             Cell current = openSet.extractMin();
 
             if(current.row == end.row && current.col == end.col){
-                return true;
+                success = true;
+                break;
             }
 
             if(current.visited) continue;
+            current.visited = true;
 
-            addNeighbor(maze, current, current.row-1, current.col, 0, end,openSet);
-            addNeighbor(maze, current, current.row+1, current.col, 2, end,openSet);
-            addNeighbor(maze, current, current.row, current.col-1, 3, end,openSet);
-            addNeighbor(maze, current, current.row, current.col+1, 1, end,openSet);
+            visitedOrder.add(current);
 
+            checkNeighbor(maze, current, current.row-1, current.col, 0, end,openSet);
+            checkNeighbor(maze, current, current.row+1, current.col, 2, end,openSet);
+            checkNeighbor(maze, current, current.row, current.col-1, 3, end,openSet);
+            checkNeighbor(maze, current, current.row, current.col+1, 1, end,openSet);
 
         }
-        return false;
+
+        List<Cell> path = new ArrayList<>();
+        if(success){
+            Cell curr = end;
+            while(curr != null){
+                path.add(curr);
+                curr = curr.parent;
+            }
+            Collections.reverse(path);
+        }
+
+        return new PathFindingResult(success, path, visitedOrder);
     }
 
-    private void addNeighbor(Maze maze, Cell current, int r, int c, int wallDirection, Cell end, MinHeap<Cell> openSet){
+    private void checkNeighbor(Maze maze, Cell current, int r, int c, int wallDirection, Cell end, MinHeap<Cell> openSet){
 
         if(!maze.isValid(r,c)) return;
 
