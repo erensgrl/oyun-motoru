@@ -1,6 +1,6 @@
 package com.labirent.model;
 
-public class Cell {
+public class Cell implements Comparable<Cell> {
     public int row, col;
     public CellType type;
     public boolean visited;
@@ -25,5 +25,16 @@ public class Cell {
 
     public void calculateFCost(){
         this.fCost = this.gCost + this.hCost;
+    }
+
+    @Override
+    public int compareTo(Cell other){
+        if(this.fCost < other.fCost) return -1;
+        if(this.fCost > other.fCost) return 1;
+
+        if(this.hCost < other.hCost) return -1;
+        if(this.hCost > other.hCost) return 1;
+
+        return 0;
     }
 }
