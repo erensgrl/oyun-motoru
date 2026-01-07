@@ -3,9 +3,8 @@ module com.labirent {
     requires javafx.fxml;
     requires javafx.graphics;
     requires javafx.base;
-    
+
     exports com.labirent;
     exports com.labirent.ui;
-    exports com.labirent.core;
     exports com.labirent.model;
 }

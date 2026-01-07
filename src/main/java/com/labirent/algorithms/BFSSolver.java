@@ -39,7 +39,18 @@ public class BFSSolver implements MazeSolver {
 
         }
 
-        return false;
+        List<Cell> path = new ArrayList<>();
+
+        if(success){
+            Cell curr = end;
+            while(curr != null){
+                path.add(curr);
+                curr = curr.parent;
+            }
+            Collections.reverse(path);
+        }
+
+        return new PathFindingResult(success, path, visitedOrder);
     }
 
     private void addNeighbor(Maze maze, Cell parent, int r, int c, int wallDirection, Queue<Cell> queue, List<Cell> visitedOrder){

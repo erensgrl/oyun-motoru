@@ -1,5 +1,8 @@
 package com.labirent.datastructures;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AVLTree<T extends Comparable<T>> {
     private class Node {
         T data;
@@ -79,6 +82,20 @@ public class AVLTree<T extends Comparable<T>> {
             inOrder(node.left);
             System.out.print(node.data + " ");
             inOrder(node.right);
+        }
+    }
+
+    public List<T> getSortedList(){
+        List<T> list = new ArrayList<>();
+        inOrderToList(root, list);
+        return list;
+    }
+
+    private void inOrderToList(Node node, List<T> list){
+        if(node != null){
+            inOrderToList(node.left, list);
+            list.add(node.data);
+            inOrderToList(node.right, list);
         }
     }
 
