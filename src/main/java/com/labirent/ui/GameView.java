@@ -19,6 +19,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import com.labirent.io.ScoreJsonReader;
+import com.labirent.io.ScoreJsonWriter;
+import com.labirent.io.ScoreCsvWriter;
 
 
 public class GameView {
@@ -203,6 +206,11 @@ public class GameView {
             Score score = new Score(playerName, duration, stepCount);
             scoreBoard.insert(score);
             updateScoreList(score);
+            List<Score> scores = ScoreJsonReader.readScores();
+            scores.add(score);
+
+            ScoreJsonWriter.writeScores(scores);
+            ScoreCsvWriter.writeScores(scores);
         }
     }
 
