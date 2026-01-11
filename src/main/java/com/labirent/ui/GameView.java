@@ -5,6 +5,7 @@ import com.labirent.algorithms.*;
 import com.labirent.datastructures.AVLTree;
 import com.labirent.datastructures.Stack;
 import com.labirent.model.*; 
+import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -46,6 +47,9 @@ public class GameView {
     private Label statusLabel;
     private Label timerLabel;
     private ListView<String> scoreListView;
+    private ListView<String> analysisListView;
+
+    private List<Score> visibleAnalysisResult;
 
     public GameView(Main mainApp, Maze maze, String playerName){
         this.mainApp = mainApp;
@@ -53,6 +57,7 @@ public class GameView {
         this.playerName = playerName;
         this.moveHistory = new Stack<>();
         this.scoreBoard = new AVLTree<>();
+        this.visibleAnalysisResult = new ArrayList<>();
 
         KruskalMazeGenerator generator = new KruskalMazeGenerator();
         generator.generate(maze);
@@ -160,7 +165,7 @@ public class GameView {
         leftPanel.getChildren().addAll(scoreTitle, scoreListView);
         view.setLeft(leftPanel);
 
-        statusLabel = new Label("Oyun başladı. Yön tuşlarını kullanarak hareket edebilirsin.");
+        statusLabel = new Label("Oyun başladı. WASD ile hareket edebilirsin.");
         statusLabel.setStyle("-fx-text-fill: #bdc3c7; -fx-padding: 10;");
         view.setBottom(statusLabel);
 
@@ -174,9 +179,9 @@ public class GameView {
         int direction = -1;
 
         if(code == KeyCode.UP || code == KeyCode.W){newR--; direction = 0;}
-        else if(code == KeyCode.DOWN || code == KeyCode.S){newR++; direction = 2;}
-        else if(code == KeyCode.LEFT || code == KeyCode.A){newC--; direction = 3;}
-        else if(code == KeyCode.RIGHT || code == KeyCode.D){newC++; direction = 1;}
+        else if(code == KeyCode.S){newR++; direction = 2;}
+        else if(code == KeyCode.A){newC--; direction = 3;}
+        else if(code == KeyCode.D){newC++; direction = 1;}
 
 
         if(maze.isValid(newR, newC)){
