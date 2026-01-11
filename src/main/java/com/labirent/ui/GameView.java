@@ -5,7 +5,6 @@ import com.labirent.algorithms.*;
 import com.labirent.datastructures.AVLTree;
 import com.labirent.datastructures.Stack;
 import com.labirent.model.*; 
-import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -47,9 +46,6 @@ public class GameView {
     private Label statusLabel;
     private Label timerLabel;
     private ListView<String> scoreListView;
-    private ListView<String> analysisListView;
-
-    private List<Score> visibleAnalysisResult;
 
     public GameView(Main mainApp, Maze maze, String playerName){
         this.mainApp = mainApp;
@@ -57,7 +53,6 @@ public class GameView {
         this.playerName = playerName;
         this.moveHistory = new Stack<>();
         this.scoreBoard = new AVLTree<>();
-        this.visibleAnalysisResult = new ArrayList<>();
 
         KruskalMazeGenerator generator = new KruskalMazeGenerator();
         generator.generate(maze);
